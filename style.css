@@ -226,6 +226,10 @@ canvas {
     background-color: #0e0e0e;
     color: #f1f1f1;
     overflow: hidden;
+    border-radius: 24px;
+    /* clip inner content cleanly to the rounded corners */
+    -webkit-mask-image: radial-gradient(white, white);
+    mask-image: radial-gradient(white, white);
 }
 
 /* Nav color override when on dark pages (class toggled by JS) */
