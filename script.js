@@ -3,8 +3,9 @@ function locomotive() {
 
   const locoScroll = new LocomotiveScroll({
     el: document.querySelector("#main"),
-    smooth: true ,
+    smooth: true,
   });
+  window._locoScroll = locoScroll;
   locoScroll.on("scroll", ScrollTrigger.update);
 
   ScrollTrigger.scrollerProxy("#main", {
@@ -416,30 +417,81 @@ ScrollTrigger.create({
 
 
 
-gsap.to("#page1",{
-  scrollTrigger:{
-    trigger:`#page1`,
-    start:`top top`,
-    end:`bottom top`,
-    pin:true,
-    scroller:`#main`
+gsap.to("#page1", {
+  scrollTrigger: {
+    trigger: `#page1`,
+    start: `top top`,
+    end: `bottom top`,
+    pin: true,
+    scroller: `#main`
   }
 })
-gsap.to("#page2",{
-  scrollTrigger:{
-    trigger:`#page2`,
-    start:`top top`,
-    end:`bottom top`,
-    pin:true,
-    scroller:`#main`
+gsap.to("#page2", {
+  scrollTrigger: {
+    trigger: `#page2`,
+    start: `top top`,
+    end: `bottom top`,
+    pin: true,
+    scroller: `#main`
   }
 })
-gsap.to("#page3",{
-  scrollTrigger:{
-    trigger:`#page3`,
-    start:`top top`,
-    end:`bottom top`,
-    pin:true,
-    scroller:`#main`
+gsap.to("#page3", {
+  scrollTrigger: {
+    trigger: `#page3`,
+    start: `top top`,
+    end: `bottom top`,
+    pin: true,
+    scroller: `#main`
   }
 })
+
+/* ---- Page 4: Skills ---- */
+gsap.to("#page4", {
+  scrollTrigger: {
+    trigger: `#page4`,
+    start: `top top`,
+    end: `bottom top`,
+    pin: true,
+    scroller: `#main`
+  }
+})
+
+/* ---- Page 5: Projects ---- */
+gsap.to("#page5", {
+  scrollTrigger: {
+    trigger: `#page5`,
+    start: `top top`,
+    end: `bottom top`,
+    pin: true,
+    scroller: `#main`
+  }
+})
+
+/* ---- Nav dark-mode toggle when on dark pages ---- */
+ScrollTrigger.create({
+  trigger: "#page4",
+  start: "top 8%",
+  end: "bottom 8%",
+  scroller: "#main",
+  onEnter: () => document.getElementById("nav").classList.add("dark-nav"),
+  onLeaveBack: () => document.getElementById("nav").classList.remove("dark-nav"),
+})
+ScrollTrigger.create({
+  trigger: "#page5",
+  start: "top 8%",
+  end: "bottom 8%",
+  scroller: "#main",
+  onEnter: () => document.getElementById("nav").classList.add("dark-nav"),
+  onLeaveBack: () => document.getElementById("nav").classList.remove("dark-nav"),
+  onLeave: () => document.getElementById("nav").classList.remove("dark-nav"),
+})
+
+/* ---- Helper: scroll nav buttons to sections ---- */
+function scrollToSection(id) {
+  const el = document.getElementById(id);
+  if (el && window._locoScroll) {
+    window._locoScroll.scrollTo(el);
+  } else {
+    el && el.scrollIntoView({ behavior: "smooth" });
+  }
+}

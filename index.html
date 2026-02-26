@@ -4,17 +4,17 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Akshat Tripathi | AI & Backend Developer</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/locomotive-scroll@3.5.4/dist/locomotive-scroll.css">
 </head>
 <body>
     <div id="nav">
         <h3><b>Akshat</b>Tripathi</h3>
-        <h3 id="button1"><b>Skills</b></h3>
+        <h3 id="button1" onclick="scrollToSection('page4')"><b>Skills</b></h3>
         <h3>     </h3>
         <h3>     </h3>
-        <h3 id="button1"><b>Contact</b></h3>
+        <h3 id="button1" onclick="scrollToSection('page5')"><b>Projects</b></h3>
         <button class="btn btn-primary"> 
             <!-- <a href="https://drive.google.com/file/d/1I_U2oEpN_lQ_wSpOydyf2NdHS9-Yb-j_/view?usp=sharing" 
             class="text-decoration-none text-reset" 
@@ -92,6 +92,99 @@
                     <h3>----REACHING NEW HEIGHTS</h3>
             </div>
         </div>
+
+        <!-- page 4: Skills -->
+        <div id="page4">
+            <div class="dark-section-inner">
+                <div class="dark-label">WHAT I BRING----</div>
+                <h1 class="dark-heading">SKILLS &<br>EXPERTISE</h1>
+                <div id="skills-grid">
+                    <div class="skill-category">
+                        <h4>LANGUAGES</h4>
+                        <ul>
+                            <li>Python</li>
+                            <li>JavaScript</li>
+                            <li>SQL</li>
+                            <li>Bash</li>
+                        </ul>
+                    </div>
+                    <div class="skill-category">
+                        <h4>AI / ML</h4>
+                        <ul>
+                            <li>LangChain</li>
+                            <li>RAG Pipelines</li>
+                            <li>LLMs & Gen AI</li>
+                            <li>Hugging Face</li>
+                        </ul>
+                    </div>
+                    <div class="skill-category">
+                        <h4>BACKEND</h4>
+                        <ul>
+                            <li>FastAPI</li>
+                            <li>Django</li>
+                            <li>REST APIs</li>
+                            <li>PostgreSQL</li>
+                        </ul>
+                    </div>
+                    <div class="skill-category">
+                        <h4>CLOUD & DEVOPS</h4>
+                        <ul>
+                            <li>AWS</li>
+                            <li>OCI</li>
+                            <li>Docker</li>
+                            <li>Render / Vercel</li>
+                        </ul>
+                    </div>
+                    <div class="skill-category">
+                        <h4>TOOLS</h4>
+                        <ul>
+                            <li>Git & GitHub</li>
+                            <li>GSAP</li>
+                            <li>Locomotive Scroll</li>
+                            <li>VS Code</li>
+                        </ul>
+                    </div>
+                    <div class="skill-category">
+                        <h4>CERTIFICATIONS</h4>
+                        <ul>
+                            <li>OCI Gen AI Professional</li>
+                            <li>AWS Cloud Foundations</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- page 5: Projects -->
+        <div id="page5">
+            <div class="dark-section-inner">
+                <div class="dark-label">WHAT I'VE BUILT----</div>
+                <h1 class="dark-heading">PROJECTS</h1>
+                <div id="projects-grid">
+                    <div class="project-card">
+                        <span class="project-tag">GEN AI · RAG · FASTAPI</span>
+                        <h3>RAGentix</h3>
+                        <p>Production-grade RAG pipeline with LangChain, custom vector stores, and a FastAPI backend — deployed on Render with Docker.</p>
+                    </div>
+                    <div class="project-card">
+                        <span class="project-tag">FASTAPI · SQLITE · REST</span>
+                        <h3>RoyaltyFlow API</h3>
+                        <p>Financial REST API managing authors, books, royalties, sales tracking, and withdrawals with strict business rule enforcement.</p>
+                    </div>
+                    <div class="project-card">
+                        <span class="project-tag">DJANGO · POSTGRESQL · AWS</span>
+                        <h3>Admin Dashboard</h3>
+                        <p>Full-stack admin panel with role-based access, CSV/PDF export, live analytics, and cloud deployment on AWS.</p>
+                    </div>
+                    <div class="project-card">
+                        <span class="project-tag">GSAP · JS · CSS</span>
+                        <h3>Portfolio</h3>
+                        <p>This site — scroll-driven canvas animation with 300 frames, Locomotive Scroll inertia, and cinematic GSAP pinning.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
     <script src="https://cdn.jsdelivr.net/npm/locomotive-scroll@3.5.4/dist/locomotive-scroll.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js" integrity="sha512-cOH8ndwGgPo+K7pTvMrqYbmI8u8k6Sho3js0gOqVWTmQMlLIi6TbqGWRTpf1ga8ci9H3iPsvDLr4X7xwhC/+DQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
