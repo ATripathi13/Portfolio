@@ -445,26 +445,54 @@ gsap.to("#page3", {
   }
 })
 
-/* ---- Page 4: Skills ---- */
-gsap.to("#page4", {
-  scrollTrigger: {
-    trigger: `#page4`,
-    start: `top top`,
-    end: `bottom top`,
-    pin: true,
-    scroller: `#main`
+/* ---- Page 4: slide up over page3, then pin ---- */
+// Step 1: slide #page4 up from below while #page3 is held static (pinned)
+gsap.fromTo("#page4",
+  { yPercent: 100 },
+  {
+    yPercent: 0,
+    ease: "none",
+    scrollTrigger: {
+      trigger: "#page3",
+      start: "top top",
+      end: "bottom top",
+      scrub: true,
+      scroller: "#main",
+    }
   }
+)
+// Step 2: pin #page4 once it has fully slid up
+ScrollTrigger.create({
+  trigger: "#page4",
+  start: "top top",
+  end: "bottom top",
+  pin: true,
+  scroller: "#main",
 })
 
-/* ---- Page 5: Projects ---- */
-gsap.to("#page5", {
-  scrollTrigger: {
-    trigger: `#page5`,
-    start: `top top`,
-    end: `bottom top`,
-    pin: true,
-    scroller: `#main`
+/* ---- Page 5: slide up over page4, then pin ---- */
+// Step 1: slide #page5 up from below while #page4 is held static (pinned)
+gsap.fromTo("#page5",
+  { yPercent: 100 },
+  {
+    yPercent: 0,
+    ease: "none",
+    scrollTrigger: {
+      trigger: "#page4",
+      start: "top top",
+      end: "bottom top",
+      scrub: true,
+      scroller: "#main",
+    }
   }
+)
+// Step 2: pin #page5 once it has fully slid up
+ScrollTrigger.create({
+  trigger: "#page5",
+  start: "top top",
+  end: "bottom top",
+  pin: true,
+  scroller: "#main",
 })
 
 /* ---- Nav dark-mode toggle when on dark pages ---- */

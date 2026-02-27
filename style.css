@@ -42,6 +42,7 @@ body {
     height: 100vh;
     width: 100vw;
     background-color: #f1f1f1;
+    z-index: 1;
 }
 
 canvas {
@@ -218,7 +219,19 @@ canvas {
 /* ========== DARK PAGES: Skills & Projects ========== */
 
 /* Page 4 & 5 base */
-#page4,
+#page4 {
+    position: relative;
+    height: 100vh;
+    width: 100vw;
+    background-color: #0e0e0e;
+    color: #f1f1f1;
+    overflow: hidden;
+    border-radius: 8px 8px 0 0;
+    -webkit-mask-image: radial-gradient(white, white);
+    mask-image: radial-gradient(white, white);
+    z-index: 2;
+}
+
 #page5 {
     position: relative;
     height: 100vh;
@@ -227,9 +240,9 @@ canvas {
     color: #f1f1f1;
     overflow: hidden;
     border-radius: 8px 8px 0 0;
-    /* clip inner content cleanly to the rounded corners */
     -webkit-mask-image: radial-gradient(white, white);
     mask-image: radial-gradient(white, white);
+    z-index: 3;
 }
 
 /* Nav color override when on dark pages (class toggled by JS) */
