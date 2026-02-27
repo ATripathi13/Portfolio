@@ -386,3 +386,13 @@ canvas {
 #button1:hover {
     opacity: 0.6;
 }
+
+/* ---- Logo: click to go home ---- */
+#logo {
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+#logo:hover {
+    opacity: 0.6;
+}
