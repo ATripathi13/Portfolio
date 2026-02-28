@@ -409,6 +409,7 @@ function scaleImage(img, ctx) {
 ScrollTrigger.create({
   trigger: "#page>canvas",
   pin: true,
+  pinSpacing: true, // Maintain sequence
   // markers:true,
   scroller: `#main`,
   start: `top top`,
@@ -423,6 +424,7 @@ gsap.to("#page1", {
     start: `top top`,
     end: `bottom top`,
     pin: true,
+    pinSpacing: true, // Maintain sequence
     scroller: `#main`
   }
 })
@@ -433,6 +435,7 @@ gsap.to("#page2", {
     start: `top top`,
     end: `bottom top`,
     pin: true,
+    pinSpacing: true, // Maintain sequence
     scroller: `#main`
   }
 })
@@ -443,57 +446,28 @@ gsap.to("#page3", {
     start: `top top`,
     end: `bottom top`,
     pin: true,
+    pinSpacing: false, // Page 4 will slide OVER Page 3
     scroller: `#main`
   }
 })
 
-/* ---- Page 4: slide up over page3, then pin ---- */
-// Step 1: slide #page4 up from below while #page3 is held static (pinned)
-gsap.fromTo("#page4",
-  { yPercent: 100 },
-  {
-    yPercent: 0,
-    ease: "none",
-    scrollTrigger: {
-      trigger: "#page3",
-      start: "top top",
-      end: "bottom top",
-      scrub: true,
-      scroller: "#main",
-    }
-  }
-)
-// Step 2: pin #page4 once it has fully slid up
+/* ---- Page 4: pinned at top, Page 5 slides over it ---- */
 ScrollTrigger.create({
   trigger: "#page4",
   start: "top top",
   end: "bottom top",
   pin: true,
+  pinSpacing: false,
   scroller: "#main",
 })
 
-/* ---- Page 5: slide up over page4, then pin ---- */
-// Step 1: slide #page5 up from below while #page4 is held static (pinned)
-gsap.fromTo("#page5",
-  { yPercent: 100 },
-  {
-    yPercent: 0,
-    ease: "none",
-    scrollTrigger: {
-      trigger: "#page4",
-      start: "top top",
-      end: "bottom top",
-      scrub: true,
-      scroller: "#main",
-    }
-  }
-)
-// Step 2: pin #page5 once it has fully slid up
+/* ---- Page 5: pinned at top as the final section ---- */
 ScrollTrigger.create({
   trigger: "#page5",
   start: "top top",
   end: "bottom top",
   pin: true,
+  pinSpacing: false,
   scroller: "#main",
 })
 
