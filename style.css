@@ -227,6 +227,7 @@ canvas {
     color: #f1f1f1;
     overflow: hidden;
     border-radius: 8px 8px 0 0;
+    border: 1px solid #f1f1f1;
     -webkit-mask-image: radial-gradient(white, white);
     mask-image: radial-gradient(white, white);
     z-index: 50;
@@ -240,6 +241,7 @@ canvas {
     color: #f1f1f1;
     overflow: hidden;
     border-radius: 8px 8px 0 0;
+    border: 1px solid #f1f1f1;
     -webkit-mask-image: radial-gradient(white, white);
     mask-image: radial-gradient(white, white);
     z-index: 60;
