@@ -374,7 +374,7 @@ gsap.to(imageSeq, {
     scrub: 0.15,
     trigger: `#page>canvas`,
     start: `top top`,
-    end: `600% top`,
+    end: `600% top`, // Animation ends at 600%
     scroller: `#main`,
   },
   onUpdate: render,
@@ -426,6 +426,7 @@ gsap.to("#page1", {
     scroller: `#main`
   }
 })
+
 gsap.to("#page2", {
   scrollTrigger: {
     trigger: `#page2`,
@@ -435,6 +436,7 @@ gsap.to("#page2", {
     scroller: `#main`
   }
 })
+
 gsap.to("#page3", {
   scrollTrigger: {
     trigger: `#page3`,
