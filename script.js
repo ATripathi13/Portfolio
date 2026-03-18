@@ -41,40 +41,57 @@ starsCanvas.width = window.innerWidth;
 starsCanvas.height = window.innerHeight;
 
 let stars = [];
-const numStars = 200;
+const numStars = 800; // Massively increased density
 let mouse = { x: -1000, y: -1000 };
+
+const starColors = [
+  "rgba(255, 255, 255, ",
+  "rgba(200, 220, 255, ", // Light blue cosmic tint
+  "rgba(241, 241, 241, "  // Base #f1f1f1
+];
 
 class Star {
   constructor() {
     this.x = Math.random() * starsCanvas.width;
     this.y = Math.random() * starsCanvas.height;
-    this.radius = Math.random() * 1.5 + 0.5;
-    this.vx = (Math.random() - 0.5) * 0.5;
-    this.vy = (Math.random() - 0.5) * 0.5;
+    this.radius = Math.random() * 1.5 + 0.3; // More varied sizes
+    this.vx = (Math.random() - 0.5) * 0.8; // Slightly faster drift
+    this.vy = (Math.random() - 0.5) * 0.8;
+    this.baseAlpha = Math.random() * 0.6 + 0.2;
+    this.colorBase = starColors[Math.floor(Math.random() * starColors.length)];
+    this.twinkleSpeed = Math.random() * 0.03 + 0.01;
+    this.angle = Math.random() * Math.PI * 2;
   }
   draw() {
     starsCtx.beginPath();
     starsCtx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-    starsCtx.fillStyle = "#f1f1f1";
+    // Oscillating alpha for twinkling effect
+    let currentAlpha = this.baseAlpha + Math.sin(this.angle) * 0.3;
+    starsCtx.fillStyle = this.colorBase + currentAlpha + ")";
     starsCtx.fill();
     starsCtx.closePath();
   }
   update() {
+    this.angle += this.twinkleSpeed;
+
     this.x += this.vx;
     this.y += this.vy;
 
-    if (this.x < 0 || this.x > starsCanvas.width) this.vx = -this.vx;
-    if (this.y < 0 || this.y > starsCanvas.height) this.vy = -this.vy;
+    // Wrap around screen instead of bouncing for a more continuous flow
+    if (this.x < 0) this.x = starsCanvas.width;
+    if (this.x > starsCanvas.width) this.x = 0;
+    if (this.y < 0) this.y = starsCanvas.height;
+    if (this.y > starsCanvas.height) this.y = 0;
 
     let dx = mouse.x - this.x;
     let dy = mouse.y - this.y;
     let distance = Math.sqrt(dx * dx + dy * dy);
-    let maxDist = 100;
+    let maxDist = 110; // Larger repulsion field for bigger "splash"
 
     if (distance < maxDist) {
       let force = (maxDist - distance) / maxDist;
-      let forceX = (dx / distance) * force * 2;
-      let forceY = (dy / distance) * force * 2;
+      let forceX = (dx / distance) * force * 5; // Stronger push
+      let forceY = (dy / distance) * force * 5;
       this.x -= forceX;
       this.y -= forceY;
     }
@@ -90,7 +107,10 @@ function initStars() {
 
 let animationFrameId;
 function animateStars() {
-  starsCtx.clearRect(0, 0, starsCanvas.width, starsCanvas.height);
+  // Trail effect matching #0e0e0e (rgb: 14,14,14) background
+  starsCtx.fillStyle = 'rgba(14, 14, 14, 0.4)';
+  starsCtx.fillRect(0, 0, starsCanvas.width, starsCanvas.height);
+
   for (let star of stars) {
     star.update();
     star.draw();
@@ -123,6 +143,16 @@ if (window._locoScroll) {
 }
 
 document.getElementById("enterBtn").addEventListener("click", () => {
+  // Reveal navbar
+  gsap.to("#nav", {
+    opacity: 1,
+    duration: 1.5,
+    ease: "power2.inOut",
+    onStart: () => {
+      document.getElementById("nav").style.pointerEvents = "all";
+    }
+  });
+
   gsap.to("#page0", {
     opacity: 0,
     scale: 1.1,
