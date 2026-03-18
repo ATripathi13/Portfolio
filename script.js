@@ -34,7 +34,112 @@ function locomotive() {
 locomotive();
 
 
-const canvas = document.querySelector("canvas");
+// --- Starfield Animation ---
+const starsCanvas = document.getElementById("starsCanvas");
+const starsCtx = starsCanvas.getContext("2d");
+starsCanvas.width = window.innerWidth;
+starsCanvas.height = window.innerHeight;
+
+let stars = [];
+const numStars = 200;
+let mouse = { x: -1000, y: -1000 };
+
+class Star {
+  constructor() {
+    this.x = Math.random() * starsCanvas.width;
+    this.y = Math.random() * starsCanvas.height;
+    this.radius = Math.random() * 1.5 + 0.5;
+    this.vx = (Math.random() - 0.5) * 0.5;
+    this.vy = (Math.random() - 0.5) * 0.5;
+  }
+  draw() {
+    starsCtx.beginPath();
+    starsCtx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    starsCtx.fillStyle = "#f1f1f1";
+    starsCtx.fill();
+    starsCtx.closePath();
+  }
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
+
+    if (this.x < 0 || this.x > starsCanvas.width) this.vx = -this.vx;
+    if (this.y < 0 || this.y > starsCanvas.height) this.vy = -this.vy;
+
+    let dx = mouse.x - this.x;
+    let dy = mouse.y - this.y;
+    let distance = Math.sqrt(dx * dx + dy * dy);
+    let maxDist = 100;
+
+    if (distance < maxDist) {
+      let force = (maxDist - distance) / maxDist;
+      let forceX = (dx / distance) * force * 2;
+      let forceY = (dy / distance) * force * 2;
+      this.x -= forceX;
+      this.y -= forceY;
+    }
+  }
+}
+
+function initStars() {
+  stars = [];
+  for (let i = 0; i < numStars; i++) {
+    stars.push(new Star());
+  }
+}
+
+let animationFrameId;
+function animateStars() {
+  starsCtx.clearRect(0, 0, starsCanvas.width, starsCanvas.height);
+  for (let star of stars) {
+    star.update();
+    star.draw();
+  }
+  animationFrameId = requestAnimationFrame(animateStars);
+}
+
+initStars();
+animateStars();
+
+window.addEventListener("resize", () => {
+  starsCanvas.width = window.innerWidth;
+  starsCanvas.height = window.innerHeight;
+  initStars();
+});
+
+starsCanvas.parentElement.addEventListener("mousemove", (e) => {
+  mouse.x = e.x;
+  mouse.y = e.y;
+});
+starsCanvas.parentElement.addEventListener("mouseleave", () => {
+  mouse.x = -1000;
+  mouse.y = -1000;
+});
+
+// --- Landing Page Transition ---
+// Stop locoScroll on load
+if (window._locoScroll) {
+  window._locoScroll.stop();
+}
+
+document.getElementById("enterBtn").addEventListener("click", () => {
+  gsap.to("#page0", {
+    opacity: 0,
+    scale: 1.1,
+    duration: 1.5,
+    ease: "power2.inOut",
+    onComplete: () => {
+      document.getElementById("page0").style.display = "none";
+      cancelAnimationFrame(animationFrameId); // Free resources
+      if (window._locoScroll) {
+        window._locoScroll.start();
+      }
+    }
+  });
+});
+
+// --- Original Cinematic Canvas ---
+const canvas = document.querySelector("#page > canvas");
 const context = canvas.getContext("2d");
 
 canvas.width = window.innerWidth;
