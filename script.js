@@ -596,15 +596,121 @@ ScrollTrigger.create({
   scroller: "#main",
 })
 
-/* ---- Page 5: pinned at top as the final section ---- */
+// --- Projects Page Cosmic Background ---
+const projCanvas = document.getElementById("projectsBg");
+const projCtx = projCanvas.getContext("2d");
+projCanvas.width = window.innerWidth;
+projCanvas.height = window.innerHeight;
+
+let projParticles = [];
+for (let i = 0; i < 150; i++) {
+  projParticles.push({
+    x: Math.random() * projCanvas.width,
+    y: Math.random() * projCanvas.height,
+    radius: Math.random() * 2,
+    vx: (Math.random() - 0.5) * 0.3,
+    vy: (Math.random() - 0.5) * 0.3
+  });
+}
+
+function animateProjBg() {
+  projCtx.fillStyle = 'rgba(14, 14, 14, 0.2)';
+  projCtx.fillRect(0, 0, projCanvas.width, projCanvas.height);
+  projCtx.fillStyle = "rgba(163, 184, 255, 0.6)"; // Soft blue tint
+  projParticles.forEach(p => {
+    p.x += p.vx;
+    p.y += p.vy;
+    if (p.x < 0) p.x = projCanvas.width;
+    if (p.x > projCanvas.width) p.x = 0;
+    if (p.y < 0) p.y = projCanvas.height;
+    if (p.y > projCanvas.height) p.y = 0;
+    projCtx.beginPath();
+    projCtx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+    projCtx.fill();
+  });
+  requestAnimationFrame(animateProjBg);
+}
+animateProjBg();
+
+window.addEventListener("resize", () => {
+  if (projCanvas) {
+    projCanvas.width = window.innerWidth;
+    projCanvas.height = window.innerHeight;
+  }
+});
+
+/* ---- Page 5: Pinned & 3D Transitions ---- */
 ScrollTrigger.create({
   trigger: "#page5",
   start: "top top",
-  end: "bottom top",
+  end: "+=300%",
   pin: true,
-  pinSpacing: false,
+  pinSpacing: true, // Allow scrolling to continue smoothly past the section once done
   scroller: "#main",
-})
+});
+
+const tlProjects = gsap.timeline({
+  scrollTrigger: {
+    trigger: "#page5",
+    start: "top top",
+    end: "+=300%",
+    scrub: 1,
+    scroller: "#main"
+  }
+});
+
+// Transition 1 -> 2
+tlProjects.to(".card-1", { rotateX: 90, autoAlpha: 0, duration: 1 }, "step1")
+  .to(".info-1", { x: -100, autoAlpha: 0, duration: 1 }, "step1")
+  .to(".card-2", { rotateX: 0, autoAlpha: 1, duration: 1 }, "step1")
+  .to(".info-2", { x: 0, autoAlpha: 1, duration: 1 }, "step1");
+
+// Transition 2 -> 3
+tlProjects.to(".card-2", { rotateX: 90, autoAlpha: 0, duration: 1 }, "step2")
+  .to(".info-2", { x: -100, autoAlpha: 0, duration: 1 }, "step2")
+  .to(".card-3", { rotateX: 0, autoAlpha: 1, duration: 1 }, "step2")
+  .to(".info-3", { x: 0, autoAlpha: 1, duration: 1 }, "step2");
+
+// Transition 3 -> 4
+tlProjects.to(".card-3", { rotateX: 90, autoAlpha: 0, duration: 1 }, "step3")
+  .to(".info-3", { x: -100, autoAlpha: 0, duration: 1 }, "step3")
+  .to(".card-4", { rotateX: 0, autoAlpha: 1, duration: 1 }, "step3")
+  .to(".info-4", { x: 0, autoAlpha: 1, duration: 1 }, "step3");
+
+
+// --- 3D Hover Parallax ---
+const cards = document.querySelectorAll(".proj-card");
+cards.forEach(card => {
+  card.addEventListener("mousemove", (e) => {
+    // Only tilt if it's currently actively visible
+    if (card.style.opacity === "0" || card.style.visibility === "hidden") return;
+
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+
+    // Max 15 degree subtle tilt
+    const xRot = (y / rect.height) * -30;
+    const yRot = (x / rect.width) * 30;
+
+    gsap.to(card, {
+      rotateX: xRot,
+      rotateY: yRot,
+      duration: 0.5,
+      ease: "power2.out"
+    });
+  });
+
+  card.addEventListener("mouseleave", () => {
+    gsap.to(card, {
+      rotateX: 0,
+      rotateY: 0,
+      duration: 0.5,
+      ease: "power2.out",
+      clearProps: "rotateY" // Let ScrollTrigger reclaim rotateX cleanly
+    });
+  });
+});
 
 /* ---- Nav dark-mode toggle when on dark pages ---- */
 ScrollTrigger.create({
