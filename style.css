@@ -463,14 +463,14 @@ canvas {
     transform: translateY(-50%) translateX(-100px);
     /* Pre-slid left */
     opacity: 0;
+    visibility: hidden;
     color: #f1f1f1;
-    pointer-events: none;
 }
 
 .project-info.active {
     opacity: 1;
     transform: translateY(-50%) translateX(0);
-    pointer-events: all;
+    visibility: visible;
 }
 
 .project-info h3 {
@@ -512,8 +512,8 @@ canvas {
 
 .proj-card {
     position: absolute;
-    width: 450px;
-    height: 550px;
+    width: 400px;
+    height: 450px;
     background: #111;
     border-radius: 20px;
     border: 1px solid rgba(241, 241, 241, 0.2);
@@ -523,7 +523,7 @@ canvas {
     transform: rotateX(-90deg);
     /* Flipped initially */
     opacity: 0;
-    pointer-events: none;
+    visibility: hidden;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -533,7 +533,7 @@ canvas {
 .proj-card.active {
     transform: rotateX(0deg);
     opacity: 1;
-    pointer-events: all;
+    visibility: visible;
 }
 
 .card-image-placeholder {
