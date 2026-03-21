@@ -228,7 +228,7 @@ canvas {
 
 #page>h3 {
     position: absolute;
-    top: 55%;
+    top: 65%;
     font-family: gilroy;
     font-weight: 400;
     color: #7c7c7c;
@@ -391,11 +391,54 @@ canvas {
     margin-bottom: 40px;
 }
 
+/* ---- Skills Layout Customization ---- */
+.skills-container-layout {
+    display: flex;
+    flex-direction: row;
+    /* Aligns text and canvas side-by-side */
+    justify-content: space-between;
+    align-items: flex-start;
+    /* Keeps the text from stretching vertically */
+
+    width: 100%;
+    min-height: 100vh;
+    position: relative;
+    padding: 10% 5% 50px 5%;
+    /* Adjusted top padding for better vertical centering */
+    gap: 40px;
+    box-sizing: border-box;
+    /* Ensures padding doesn't break the 100% width */
+}
+
+.skills-text-col {
+    width: 45%;
+    /* Slightly reduced to give the canvas more breathing room */
+    position: relative;
+    z-index: 2;
+}
+
+.skills-canvas-col {
+    width: 50%;
+    height: 80vh;
+    /* Keeps the 3D area large and visible */
+    position: sticky;
+    /* Keeps the canvas in view as the user reads the skill lists */
+    top: 10%;
+    z-index: 1;
+}
+
+#skillsCanvas {
+    width: 100% !important;
+    height: 100% !important;
+    outline: none;
+    display: block;
+}
+
 /* ---- Skills Grid ---- */
 #skills-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
 }
 
 .skill-category {

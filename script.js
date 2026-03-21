@@ -1,3 +1,4 @@
+console.log("Portfolio Script Booting...");
 function locomotive() {
   gsap.registerPlugin(ScrollTrigger);
 
@@ -648,6 +649,193 @@ window.addEventListener("resize", () => {
     projCanvas.width = window.innerWidth;
     projCanvas.height = window.innerHeight;
   }
+});
+
+// --- Page 4 3D Tech Stack Animation (Three.js + Cannon.js) ---
+function initTechStack3D() {
+  console.log("Initializing Tech Stack 3D...");
+  const container = document.getElementById("skills3DContainer");
+  const canvasEl = document.getElementById("skillsCanvas");
+
+  if (!container) { console.error("Missing skills3DContainer"); return; }
+  if (!canvasEl) { console.error("Missing skillsCanvas"); return; }
+  if (typeof THREE === 'undefined') { console.error("THREE.js is not loaded"); return; }
+  if (typeof CANNON === 'undefined') { console.error("CANNON is not loaded. Ensure cannon-es CDN is valid."); return; }
+
+  const width = container.clientWidth;
+  const height = container.clientHeight;
+  console.log(`Canvas Container Size: ${width}x${height}`);
+
+  if (width === 0 || height === 0) {
+    console.error("3D Container has 0 width or height! Canvas cannot render.");
+    return;
+  }
+
+  // Scene setup
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(32.5, width / height, 1, 100);
+  camera.position.set(0, 0, 20);
+
+  const renderer = new THREE.WebGLRenderer({ canvas: canvasEl, alpha: true, antialias: true });
+  renderer.setSize(width, height);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.shadowMap.enabled = true;
+  renderer.toneMappingExposure = 1.5;
+
+  // Lighting replicating user's R3F setup
+  scene.add(new THREE.AmbientLight(0xffffff, 1));
+  const spotLight = new THREE.SpotLight(0xffffff, 2);
+  spotLight.position.set(20, 20, 25);
+  spotLight.angle = 0.2;
+  spotLight.penumbra = 1;
+  spotLight.castShadow = true;
+  spotLight.shadow.mapSize.width = 512;
+  spotLight.shadow.mapSize.height = 512;
+  scene.add(spotLight);
+
+  const dirLight = new THREE.DirectionalLight(0xffffff, 2);
+  dirLight.position.set(0, 5, -4);
+  scene.add(dirLight);
+
+  // Physics World (Cannon.js)
+  const world = new CANNON.World();
+  world.gravity.set(0, 0, 0); // Zero gravity - driven by impulses
+
+  // Kinematic Pointer Sphere (to push others away)
+  const pointerShape = new CANNON.Sphere(2);
+  const pointerBody = new CANNON.Body({
+    mass: 0,
+    type: CANNON.Body.KINEMATIC,
+    shape: pointerShape,
+    position: new CANNON.Vec3(100, 100, 100)
+  });
+  world.addBody(pointerBody);
+
+  // Mouse Listener
+  const mouse = new THREE.Vector2(0, 0);
+  container.addEventListener("mousemove", (e) => {
+    const rect = container.getBoundingClientRect();
+    mouse.x = ((e.clientX - rect.left) / width) * 2 - 1;
+    mouse.y = -((e.clientY - rect.top) / height) * 2 + 1;
+  });
+
+  // Load Textures from user's provided images
+  const textureLoader = new THREE.TextureLoader();
+  const imageUrls = [
+    "images/react2.webp",
+    "images/next2.webp",
+    "images/node2.webp",
+    "images/express.webp",
+    "images/mongo.webp",
+    "images/mysql.webp",
+    "images/typescript.webp",
+    "images/javascript.webp",
+  ];
+
+  const materials = imageUrls.map(url => {
+    const texture = textureLoader.load(url);
+    return new THREE.MeshPhysicalMaterial({
+      map: texture,
+      emissive: 0xffffff,
+      emissiveMap: texture,
+      emissiveIntensity: 0.3,
+      metalness: 0.5,
+      roughness: 1,
+      clearcoat: 0.1,
+    });
+  });
+
+  const spheres = [];
+  const sphereGeo = new THREE.SphereGeometry(1, 28, 28);
+
+  // Populate 30 Spheres (matching R3F codebase)
+  for (let i = 0; i < 30; i++) {
+    const scale = [0.7, 1, 0.8, 1, 1][Math.floor(Math.random() * 5)];
+    const material = materials[Math.floor(Math.random() * materials.length)];
+
+    const mesh = new THREE.Mesh(sphereGeo, material);
+    mesh.scale.set(scale, scale, scale);
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+
+    // Add cylindrical ring (like user's R3F code)
+    const ringGeo = new THREE.CylinderGeometry(0.15 * scale, 0.275 * scale, 1.2 * scale, 16);
+    const ringMesh = new THREE.Mesh(ringGeo, new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.2 }));
+    ringMesh.rotation.x = Math.PI / 2;
+    ringMesh.position.z = 1.2 * scale;
+    mesh.add(ringMesh);
+    scene.add(mesh);
+
+    // Physics body
+    const shape = new CANNON.Sphere(scale);
+    const body = new CANNON.Body({
+      mass: 1,
+      shape: shape,
+      linearDamping: 0.75, // Match user physics
+      angularDamping: 0.15,
+      material: new CANNON.Material({ friction: 0.2, restitution: 0.5 })
+    });
+
+    // Spawn spread
+    body.position.set(
+      (Math.random() - 0.5) * 20,
+      (Math.random() - 0.5) * 20 - 10,
+      (Math.random() - 0.5) * 20
+    );
+    world.addBody(body);
+    spheres.push({ mesh, body, scale });
+  }
+
+  const clock = new THREE.Clock();
+  const vec = new THREE.Vector3();
+  const targetPointer = new CANNON.Vec3();
+
+  function animate() {
+    requestAnimationFrame(animate);
+    let delta = clock.getDelta();
+    delta = Math.min(0.1, delta);
+
+    // Lerp Kinematic Pointer
+    // Map view bounds roughly 12 units at z=0 (based on fov and distance)
+    targetPointer.set(mouse.x * 12, mouse.y * 12, 0);
+    pointerBody.position.lerp(targetPointer, 0.2, pointerBody.position);
+
+    // Step Physics
+    world.step(1 / 60, delta, 3);
+
+    // Dynamic Central Attraction Impulse
+    spheres.forEach(s => {
+      const p = s.body.position;
+      vec.set(p.x, p.y, p.z).normalize();
+
+      // Mirroring user's R3F impulse values exactly: (-50, -150, -50) * delta * scale
+      const forceX = vec.x * -50 * delta * s.scale;
+      const forceY = vec.y * -150 * delta * s.scale;
+      const forceZ = vec.z * -50 * delta * s.scale;
+
+      s.body.applyImpulse(new CANNON.Vec3(forceX, forceY, forceZ), s.body.position);
+
+      s.mesh.position.copy(s.body.position);
+      s.mesh.quaternion.copy(s.body.quaternion);
+    });
+
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener("resize", () => {
+    if (!container) return;
+    camera.aspect = container.clientWidth / container.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(container.clientWidth, container.clientHeight);
+  });
+}
+
+console.log("Script.js reached reaching end of body initialization.");
+
+// Ensure execution upon script load & init
+window.addEventListener("load", () => {
+  setTimeout(initTechStack3D, 200);
 });
 
 /* ---- Page 5: Pinned & 3D Transitions ---- */

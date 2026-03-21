@@ -115,62 +115,69 @@
 
         <!-- page 4: Skills -->
         <div id="page4">
-            <div class="dark-section-inner">
-                <div class="dark-label">WHAT I BRING----</div>
-                <h1 class="dark-heading">SKILLS &<br>EXPERTISE</h1>
-                <div id="skills-grid">
-                    <div class="skill-category">
-                        <h4>LANGUAGES</h4>
-                        <ul>
-                            <li>Python</li>
-                            <li>JavaScript</li>
-                            <li>SQL</li>
-                            <li>Bash</li>
-                        </ul>
+            <div class="skills-container-layout">
+                <!-- Left Text Column -->
+                <div class="skills-text-col">
+                    <div class="dark-label">WHAT I BRING----</div>
+                    <h1 class="dark-heading">SKILLS &<br>EXPERTISE</h1>
+                    <div id="skills-grid">
+                        <div class="skill-category">
+                            <h4>LANGUAGES</h4>
+                            <ul>
+                                <li>Python</li>
+                                <li>JavaScript</li>
+                                <li>SQL</li>
+                                <li>Bash</li>
+                            </ul>
+                        </div>
+                        <div class="skill-category">
+                            <h4>AI / ML</h4>
+                            <ul>
+                                <li>LangChain</li>
+                                <li>RAG Pipelines</li>
+                                <li>LLMs & Gen AI</li>
+                                <li>Hugging Face</li>
+                            </ul>
+                        </div>
+                        <div class="skill-category">
+                            <h4>BACKEND</h4>
+                            <ul>
+                                <li>FastAPI</li>
+                                <li>Django</li>
+                                <li>REST APIs</li>
+                                <li>PostgreSQL</li>
+                            </ul>
+                        </div>
+                        <div class="skill-category">
+                            <h4>CLOUD & DEVOPS</h4>
+                            <ul>
+                                <li>AWS</li>
+                                <li>OCI</li>
+                                <li>Docker</li>
+                                <li>Render / Vercel</li>
+                            </ul>
+                        </div>
+                        <div class="skill-category">
+                            <h4>TOOLS</h4>
+                            <ul>
+                                <li>Git & GitHub</li>
+                                <li>GSAP</li>
+                                <li>Locomotive Scroll</li>
+                                <li>VS Code</li>
+                            </ul>
+                        </div>
+                        <div class="skill-category">
+                            <h4>CERTIFICATIONS</h4>
+                            <ul>
+                                <li>OCI Gen AI Professional</li>
+                                <li>AWS Cloud Foundations</li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="skill-category">
-                        <h4>AI / ML</h4>
-                        <ul>
-                            <li>LangChain</li>
-                            <li>RAG Pipelines</li>
-                            <li>LLMs & Gen AI</li>
-                            <li>Hugging Face</li>
-                        </ul>
-                    </div>
-                    <div class="skill-category">
-                        <h4>BACKEND</h4>
-                        <ul>
-                            <li>FastAPI</li>
-                            <li>Django</li>
-                            <li>REST APIs</li>
-                            <li>PostgreSQL</li>
-                        </ul>
-                    </div>
-                    <div class="skill-category">
-                        <h4>CLOUD & DEVOPS</h4>
-                        <ul>
-                            <li>AWS</li>
-                            <li>OCI</li>
-                            <li>Docker</li>
-                            <li>Render / Vercel</li>
-                        </ul>
-                    </div>
-                    <div class="skill-category">
-                        <h4>TOOLS</h4>
-                        <ul>
-                            <li>Git & GitHub</li>
-                            <li>GSAP</li>
-                            <li>Locomotive Scroll</li>
-                            <li>VS Code</li>
-                        </ul>
-                    </div>
-                    <div class="skill-category">
-                        <h4>CERTIFICATIONS</h4>
-                        <ul>
-                            <li>OCI Gen AI Professional</li>
-                            <li>AWS Cloud Foundations</li>
-                        </ul>
-                    </div>
+                </div>
+                <!-- Right 3D Canvas Column -->
+                <div class="skills-canvas-col" id="skills3DContainer">
+                    <canvas id="skillsCanvas"></canvas>
                 </div>
             </div>
         </div>
@@ -257,6 +264,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/ScrollTrigger.min.js"
         integrity="sha512-AMl4wfwAmDM1lsQvVBBRHYENn1FR8cfOTpt8QVbb/P55mYOdahHD4LmHM1W55pNe3j/3od8ELzPf/8eNkkjISQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cannon.js/0.6.2/cannon.min.js"></script>
     <script src="script.js"></script>
 </body>
 
