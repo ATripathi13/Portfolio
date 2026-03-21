@@ -142,7 +142,18 @@ if (window._locoScroll) {
   window._locoScroll.stop();
 }
 
-document.getElementById("enterBtn").addEventListener("click", () => {
+const enterBtn = document.getElementById("enterBtn");
+if (enterBtn) {
+  enterBtn.addEventListener("mousemove", (e) => {
+    const rect = enterBtn.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    enterBtn.style.setProperty("--x", `${x}px`);
+    enterBtn.style.setProperty("--y", `${y}px`);
+  });
+}
+
+enterBtn.addEventListener("click", () => {
   // Reveal navbar
   gsap.to("#nav", {
     opacity: 1,

@@ -55,25 +55,67 @@ body {
     border: 2px solid rgba(241, 241, 241, 0.4);
     border-radius: 50px;
     cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 0 15px rgba(241, 241, 241, 0.2);
-    animation: pulseGlow 2s infinite alternate;
+    transition: transform 0.3s ease, color 0.3s ease;
+    position: relative;
+    overflow: visible;
+}
+
+/* Dynamic Golden border glow following cursor */
+#enterBtn::before {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    /* Covers the existing 2px border */
+    border-radius: 50px;
+    padding: 2px;
+    /* Matches the border-width to mask the inner content out */
+    /* background: radial-gradient(120px circle at var(--x, 50%) var(--y, 50%),
+            rgba(255, 215, 0, 1) 0%,
+            Bright Gold core
+            rgba(255, 140, 0, 0.8) 40%,
+            Rich Sun Orange
+            transparent 100%); */
+    /* background: radial-gradient(120px circle at var(--x, 50%) var(--y, 50%),
+            rgba(138, 43, 226, 1) 0%,
+            Deep Purple core (BlueViolet)
+            rgba(25, 25, 112, 0.8) 50%,
+            Midnight Blue mid-glow
+            transparent 100%); */
+    /* background: radial-gradient(120px circle at var(--x, 50%) var(--y, 50%),
+            rgba(138, 43, 226, 1) 0%,
+            Deep Purple (BlueViolet) core
+            rgba(25, 25, 112, 0.8) 50%,
+            Midnight Blue glow
+            transparent 100%); */
+    background: radial-gradient(120px circle at var(--x, 50%) var(--y, 50%),
+            rgba(255, 0, 144, 1) 0%,
+            /* #FF0090 - Vibrant Neon Pink Core */
+            rgba(138, 43, 226, 0.8) 35%,
+            /* Deep Purple (BlueViolet) */
+            rgba(25, 25, 112, 0.6) 70%,
+            /* Midnight Blue Glow */
+            transparent 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+    opacity: 0;
+    /* Hidden by default */
+    transition: opacity 0.3s ease;
+}
+
+#enterBtn:hover::before {
+    opacity: 1;
+    /* Reveals the glowing segment when hovered */
 }
 
 #enterBtn:hover {
-    box-shadow: 0 0 40px rgba(241, 241, 241, 0.8), inset 0 0 10px rgba(241, 241, 241, 0.3);
-    border-color: #f1f1f1;
     transform: scale(1.05);
-}
-
-@keyframes pulseGlow {
-    0% {
-        box-shadow: 0 0 10px rgba(241, 241, 241, 0.1);
-    }
-
-    100% {
-        box-shadow: 0 0 25px rgba(241, 241, 241, 0.4);
-    }
+    color: #ffda75;
+    /* Slight golden tint to text on hover */
+    border-color: rgba(241, 241, 241, 0.1);
+    /* Dim base border so glow pops */
 }
 
 
