@@ -652,22 +652,30 @@ window.addEventListener("resize", () => {
 });
 
 // --- Page 4 3D Tech Stack Animation (Three.js + Cannon.js) ---
-function initTechStack3D() {
-  console.log("Initializing Tech Stack 3D...");
+function initTechStack3D(retryCount = 0) {
+  console.log(`Initializing Tech Stack 3D (Attempt ${retryCount + 1})...`);
   const container = document.getElementById("skills3DContainer");
   const canvasEl = document.getElementById("skillsCanvas");
 
-  if (!container) { console.error("Missing skills3DContainer"); return; }
-  if (!canvasEl) { console.error("Missing skillsCanvas"); return; }
-  if (typeof THREE === 'undefined') { console.error("THREE.js is not loaded"); return; }
-  if (typeof CANNON === 'undefined') { console.error("CANNON is not loaded. Ensure cannon-es CDN is valid."); return; }
+  if (!container || !canvasEl) {
+    if (retryCount < 5) setTimeout(() => initTechStack3D(retryCount + 1), 500);
+    return;
+  }
+
+  // Check globals
+  if (typeof THREE === 'undefined' || typeof CANNON === 'undefined') {
+    console.warn("THREE or CANNON not yet available, retrying...");
+    if (retryCount < 10) setTimeout(() => initTechStack3D(retryCount + 1), 500);
+    return;
+  }
 
   const width = container.clientWidth;
   const height = container.clientHeight;
   console.log(`Canvas Container Size: ${width}x${height}`);
 
   if (width === 0 || height === 0) {
-    console.error("3D Container has 0 width or height! Canvas cannot render.");
+    console.warn("Container has 0 size, retrying after layout settle...");
+    if (retryCount < 5) setTimeout(() => initTechStack3D(retryCount + 1), 500);
     return;
   }
 
@@ -728,9 +736,7 @@ function initTechStack3D() {
     "images/django.png",
     "images/docker.png",
     "images/fastapi.png",
-    // "images/next2.webp",
-    // "images/node2.webp",
-    // "images/express.webp",
+    "images/github.png",
     "images/mongo.webp",
     "images/mysql.webp",
     "images/typescript.webp",
