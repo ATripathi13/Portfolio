@@ -896,12 +896,18 @@ cards.forEach(card => {
     if (card.style.opacity === "0" || card.style.visibility === "hidden") return;
 
     const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left - rect.width / 2;
-    const y = e.clientY - rect.top - rect.height / 2;
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
 
-    // Max 15 degree subtle tilt
-    const xRot = (y / rect.height) * -30;
-    const yRot = (x / rect.width) * 30;
+    // Update CSS variables for the golden glow
+    card.style.setProperty("--x", `${x}px`);
+    card.style.setProperty("--y", `${y}px`);
+
+    // Max 30 degree subtle tilt (relative to center)
+    const tiltX = x - rect.width / 2;
+    const tiltY = y - rect.height / 2;
+    const xRot = (tiltY / rect.height) * -30;
+    const yRot = (tiltX / rect.width) * 30;
 
     gsap.to(card, {
       rotateX: xRot,
