@@ -591,7 +591,7 @@ gsap.to("#page3", {
   scrollTrigger: {
     trigger: `#page3`,
     start: `top top`,
-    end: `bottom top`,
+    // end: `bottom top`,
     pin: true,
     pinSpacing: false, // Page 4 will slide OVER Page 3
     scroller: `#main`
@@ -731,6 +731,9 @@ function initTechStack3D(retryCount = 0) {
   const textureLoader = new THREE.TextureLoader();
   const imageUrls = [
     "images/react2.webp",
+    "images/css.png",
+    "images/html.png",
+    "images/google cloud.png",
     "images/python.png",
     "images/ai.png",
     "images/django.png",
@@ -956,3 +959,182 @@ function scrollToSection(id) {
     el && el.scrollIntoView({ behavior: "smooth" });
   }
 }
+
+/* =========================================
+   PAGE 6: CERTIFICATIONS (3D CARD STACK)
+   ========================================= */
+function initCertCards() {
+  const stage = document.getElementById('certStage');
+  const dotsContainer = document.getElementById('certDots');
+  if (!stage || !dotsContainer) return;
+
+  const cards = Array.from(stage.querySelectorAll('.cert-card'));
+  const dots = Array.from(dotsContainer.querySelectorAll('.cert-dot'));
+
+  if (cards.length === 0) return;
+
+  const len = cards.length;
+  let activeIndex = 0;
+  let autoPlayId;
+  let isHovering = false;
+
+  // Configuration mapping from React code - adjusted for viewport scale
+  const maxVisible = 5; // Reduced from 7 to match 5 items and prevent off-screen spread
+  const maxOffset = Math.max(0, Math.floor(maxVisible / 2)); // 2
+  const cardWidth = 360; // Downscaled from 450 to harmony with average screens
+  const overlap = 0.55; // Increased overlap to prevent wide spread
+  const cardSpacing = Math.max(10, Math.round(cardWidth * (1 - overlap))); // ~162px
+  const spreadDeg = 40; // Reduced spread
+  const stepDeg = maxOffset > 0 ? spreadDeg / maxOffset : 0;
+  const depthPx = 100; // Softer depth
+  const tiltXDeg = 10;
+  const activeLiftPx = 20;
+  const activeScale = 1.05;
+  const inactiveScale = 0.95;
+
+  function wrapIndex(n) {
+    if (len <= 0) return 0;
+    return ((n % len) + len) % len;
+  }
+
+  function signedOffset(i, active) {
+    const raw = i - active;
+    if (len <= 1) return raw;
+    const alt = raw > 0 ? raw - len : raw + len;
+    return Math.abs(alt) < Math.abs(raw) ? alt : raw;
+  }
+
+  function renderStack(index) {
+    activeIndex = wrapIndex(index);
+
+    // Update Dots
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('active', i === activeIndex);
+    });
+
+    // Update Cards
+    cards.forEach((card, i) => {
+      const off = signedOffset(i, activeIndex);
+      const abs = Math.abs(off);
+      const visible = abs <= maxOffset;
+
+      if (!visible) {
+        gsap.to(card, { autoAlpha: 0, duration: 0.3 });
+        return;
+      }
+
+      const rotateZ = off * stepDeg;
+      const x = off * cardSpacing;
+      const y = abs * 8; // Arc down slightly less
+      const z = -abs * depthPx;
+
+      const isActive = (off === 0);
+      const scale = isActive ? activeScale : inactiveScale;
+      const lift = isActive ? -activeLiftPx : 0;
+      const rotateX = isActive ? 0 : tiltXDeg;
+      const zIndex = 100 - abs;
+
+      card.style.zIndex = zIndex;
+      card.classList.toggle('active-card', isActive);
+
+      // We explicitly rely on GSAP's 3D engine ordering for a precise match
+      gsap.to(card, {
+        autoAlpha: 1,
+        x: x,
+        y: y + lift,
+        z: z,
+        rotationZ: rotateZ,
+        rotationX: rotateX,
+        scale: scale,
+        transformOrigin: "bottom center",
+        duration: 0.8,
+        ease: "power3.out",
+        overwrite: "auto"
+      });
+    });
+  }
+
+  // Next / Prev Actions
+  const next = () => renderStack(activeIndex + 1);
+  const prev = () => renderStack(activeIndex - 1);
+
+  // Click Interactivity
+  cards.forEach((card, i) => {
+    card.addEventListener('click', () => renderStack(i));
+  });
+
+  dots.forEach((dot, i) => {
+    dot.addEventListener('click', () => renderStack(i));
+  });
+
+  // Swipe / Drag Logic (on active cards only for cleaner UX)
+  let startX = 0;
+  let isDragging = false;
+
+  stage.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    startX = e.clientX;
+  });
+
+  window.addEventListener('mouseup', (e) => {
+    if (!isDragging) return;
+    isDragging = false;
+    const endX = e.clientX;
+    const travel = endX - startX;
+
+    // Threshold 80px to swipe
+    if (travel > 80) prev();
+    else if (travel < -80) next();
+  });
+
+  // Touch Support
+  stage.addEventListener('touchstart', (e) => {
+    isDragging = true;
+    startX = e.touches[0].clientX;
+  });
+
+  window.addEventListener('touchend', (e) => {
+    if (!isDragging) return;
+    isDragging = false;
+    const endX = e.changedTouches[0].clientX;
+    const travel = endX - startX;
+
+    if (travel > 80) prev();
+    else if (travel < -80) next();
+  });
+
+  // Auto Advance Timeline
+  function startAutoPlay() {
+    stopAutoPlay();
+    autoPlayId = setInterval(() => {
+      if (!isHovering) next();
+    }, 2800);
+  }
+
+  function stopAutoPlay() {
+    if (autoPlayId) clearInterval(autoPlayId);
+  }
+
+  document.getElementById('certStack').addEventListener('mouseenter', () => isHovering = true);
+  document.getElementById('certStack').addEventListener('mouseleave', () => isHovering = false);
+
+  // Initial Render
+  renderStack(activeIndex);
+  startAutoPlay();
+}
+
+// Initialize on window load to ensure layout dimensions are ready
+window.addEventListener("load", () => {
+  setTimeout(initCertCards, 300);
+});
+
+// Create Dark Nav trigger for #page6 
+ScrollTrigger.create({
+  trigger: "#page6",
+  start: "top 8%",
+  end: "bottom 8%",
+  scroller: "#main",
+  onEnter: () => document.getElementById("nav").classList.add("dark-nav"),
+  onLeaveBack: () => document.getElementById("nav").classList.remove("dark-nav"),
+  onLeave: () => document.getElementById("nav").classList.remove("dark-nav"),
+});

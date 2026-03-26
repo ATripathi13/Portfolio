@@ -734,3 +734,206 @@ canvas {
 #logo:hover {
     opacity: 0.6;
 }
+
+/* =========================================
+   PAGE 6: CERTIFICATIONS (3D CARD STACK)
+   ========================================= */
+
+#page6 {
+    min-height: 100vh;
+    width: 100vw;
+    background-color: #0e0e0e;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    /* Added to prevent horizontal scrolling */
+}
+
+.certifications-container {
+    width: 100%;
+    max-width: 1200px;
+    padding: 80px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+}
+
+.card-stack-wrapper {
+    width: 100%;
+    max-width: 800px;
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.card-stack-container {
+    position: relative;
+    width: 100%;
+    height: 480px;
+    /* Base height to give room for arc */
+    outline: none;
+    perspective: 1100px;
+}
+
+/* Atmospheric Glow Spotlights mapping Framer Motion's blurs */
+.spotlight {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.spotlight-top {
+    top: 24px;
+    height: 192px;
+    width: 70%;
+    background: rgba(255, 255, 255, 0.05);
+    filter: blur(60px);
+}
+
+.spotlight-bottom {
+    bottom: 0;
+    height: 160px;
+    width: 76%;
+    background: rgba(0, 0, 0, 0.3);
+    filter: blur(60px);
+}
+
+.card-stack-stage {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    perspective: 1100px;
+}
+
+/* Individual Cards */
+.cert-card {
+    position: absolute;
+    bottom: 0;
+    width: 360px;
+    height: 240px;
+    border-radius: 16px;
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    background: #1a1a1a;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+    will-change: transform;
+    user-select: none;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    /* Cards will be positioned entirely by JS (GSAP) */
+    opacity: 0;
+    /* Hidden by default until JS kicks in */
+}
+
+.cert-card.active-card {
+    cursor: grab;
+}
+
+.cert-card.active-card:active {
+    cursor: grabbing;
+}
+
+/* Card Internals */
+.cert-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: #222;
+}
+
+.cert-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+}
+
+.cert-gradient {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 5;
+}
+
+.cert-content {
+    position: absolute;
+    z-index: 10;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 24px;
+    pointer-events: none;
+}
+
+.cert-title {
+    font-family: Objectivity;
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cert-desc {
+    font-family: gilroy;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+    margin-top: 4px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Dots Navigation */
+.cert-dots {
+    margin-top: 30px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+}
+
+.cert-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    padding: 0;
+}
+
+.cert-dot:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.cert-dot.active {
+    background: #fff;
+}
+
+@media (max-width: 600px) {
+    .cert-card {
+        width: 320px;
+        height: 220px;
+    }
+}
