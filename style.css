@@ -765,7 +765,8 @@ canvas {
 .card-stack-wrapper {
     width: 100%;
     max-width: 800px;
-    margin-top: 50px;
+    margin-top: -35px;
+    /* Exactly 5px visual gap accounting for the 40px heading margin-bottom */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -792,15 +793,16 @@ canvas {
 }
 
 .spotlight-top {
-    top: 24px;
-    height: 192px;
-    width: 70%;
+    top: 60px;
+    height: 300px;
+    width: 80%;
     background: rgba(255, 255, 255, 0.05);
-    filter: blur(60px);
+    /* Subtle glowing white hue behind the header */
+    filter: blur(80px);
 }
 
 .spotlight-bottom {
-    bottom: 0;
+    margin-top: 0px;
     height: 160px;
     width: 76%;
     background: rgba(0, 0, 0, 0.3);
@@ -814,6 +816,8 @@ canvas {
     align-items: flex-end;
     justify-content: center;
     perspective: 1100px;
+    z-index: 10;
+    /* Ensures cards sit strictly above the background spotlights */
 }
 
 /* Individual Cards */
