@@ -941,3 +941,101 @@ canvas {
         height: 220px;
     }
 }
+
+/* =========================================
+   PAGE 7: EXPERIENCE (3D PLANET TIMELINE)
+   ========================================= */
+
+#page7 {
+    width: 100vw;
+    height: 100vh;
+    background-color: #030303;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+}
+
+#experienceCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+}
+
+.exp-container {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 1200px;
+    padding-top: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: none;
+    /* Let clicks pass through to canvas if needed */
+}
+
+.exp-timeline {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 10%;
+    width: 40%;
+    height: auto;
+}
+
+.exp-step {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    /* Hidden by default; gsap handles visibility */
+    visibility: hidden;
+    transform: translateY(50px);
+}
+
+.exp-year {
+    font-size: 16px;
+    color: #a3b8ff;
+    letter-spacing: 2px;
+    font-family: Space Mono, monospace;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.exp-title {
+    font-size: 42px;
+    color: #fff;
+    font-family: Objectivity;
+    font-weight: 700;
+    margin-bottom: 12px;
+    line-height: 1.1;
+}
+
+.exp-desc {
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.7);
+    font-family: gilroy;
+    line-height: 1.6;
+    max-width: 480px;
+}
+
+@media (max-width: 768px) {
+    .exp-timeline {
+        left: 5%;
+        width: 90%;
+        top: 65%;
+        /* push text down so planet is visible above */
+    }
+
+    .exp-title {
+        font-size: 32px;
+    }
+
+    .exp-desc {
+        font-size: 16px;
+    }
+}

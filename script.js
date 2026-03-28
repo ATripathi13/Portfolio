@@ -1135,6 +1135,122 @@ ScrollTrigger.create({
   end: "bottom 8%",
   scroller: "#main",
   onEnter: () => document.getElementById("nav").classList.add("dark-nav"),
-  onLeaveBack: () => document.getElementById("nav").classList.remove("dark-nav"),
   onLeave: () => document.getElementById("nav").classList.remove("dark-nav"),
+});
+
+/* =========================================
+   PAGE 7: EXPERIENCE (3D PLANET TIMELINE)
+   ========================================= */
+
+function initExperienceTimeline() {
+  const canvas = document.getElementById("experienceCanvas");
+  if (!canvas) return;
+
+  // 1. Three.js Setup
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+  camera.position.z = 15;
+
+  const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+  // Lights
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+  scene.add(ambientLight);
+
+  const dirLight = new THREE.DirectionalLight(0xffffff, 1.5);
+  dirLight.position.set(-5, 5, 8);
+  scene.add(dirLight);
+
+  // 2. Create Planets
+  const geometry = new THREE.SphereGeometry(3.5, 64, 64);
+
+  // Planet 1: Present (Tech/Blue)
+  const mat1 = new THREE.MeshStandardMaterial({
+    color: 0x1144aa,
+    roughness: 0.6,
+    metalness: 0.2,
+    wireframe: true // Giving the present a futuristic wireframe tech vibe
+  });
+  const planet1 = new THREE.Mesh(geometry, mat1);
+  planet1.position.set(12, -8, -5); // Start off-screen bottom right
+  scene.add(planet1);
+
+  // Planet 2: Mid (Red/Mars)
+  const mat2 = new THREE.MeshStandardMaterial({
+    color: 0xaa3322,
+    roughness: 0.8,
+    metalness: 0.1
+  });
+  const planet2 = new THREE.Mesh(geometry, mat2);
+  planet2.position.set(12, -8, -5);
+  scene.add(planet2);
+
+  // Planet 3: Genesis (Green/Earth-like)
+  const mat3 = new THREE.MeshStandardMaterial({
+    color: 0x228844,
+    roughness: 0.9,
+    metalness: 0.0
+  });
+  const planet3 = new THREE.Mesh(geometry, mat3);
+  planet3.position.set(12, -8, -5);
+  scene.add(planet3);
+
+  // 3. Render Loop (Constant slow rotation)
+  function animate() {
+    requestAnimationFrame(animate);
+    planet1.rotation.y += 0.002;
+    planet1.rotation.x += 0.001;
+    planet2.rotation.y += 0.002;
+    planet3.rotation.y += 0.002;
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  // Resize Handler
+  window.addEventListener("resize", () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  // 4. GSAP ScrollTrigger Sequence
+  const targetX = window.innerWidth < 768 ? 0 : 4; // Center on mobile, right on desktop
+
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: "#page7",
+      scroller: "#main",
+      pin: true,
+      scrub: 1,
+      start: "top top",
+      end: "+=300%", // 3 screens height of scrolling
+    }
+  });
+
+  // Step 1: Planet 1 arrives, Step 1 Text fades in
+  tl.to(planet1.position, { x: targetX, y: 0, z: 0, duration: 1, ease: "power2.out" })
+    .to('.exp-step-1', { autoAlpha: 1, y: 0, duration: 1 }, "<")
+
+    // Step 1 exits, Step 2 arrives
+    .to(planet1.position, { x: -10, y: 8, duration: 1, ease: "power2.in" }, "+=1")
+    .to('.exp-step-1', { autoAlpha: 0, y: -50, duration: 1 }, "<")
+
+    .to(planet2.position, { x: targetX, y: 0, z: 0, duration: 1, ease: "power2.out" }, "<0.4")
+    .to('.exp-step-2', { autoAlpha: 1, y: 0, duration: 1 }, "<")
+
+    // Step 2 exits, Step 3 arrives
+    .to(planet2.position, { x: -10, y: 8, duration: 1, ease: "power2.in" }, "+=1")
+    .to('.exp-step-2', { autoAlpha: 0, y: -50, duration: 1 }, "<")
+
+    .to(planet3.position, { x: targetX, y: 0, z: 0, duration: 1, ease: "power2.out" }, "<0.4")
+    .to('.exp-step-3', { autoAlpha: 1, y: 0, duration: 1 }, "<")
+
+    // Hold final frame briefly so user can read Step 3 before unpinning
+    .to({}, { duration: 0.5 });
+}
+
+window.addEventListener("load", () => {
+  setTimeout(initExperienceTimeline, 400); // Initialize slightly after others
 });
