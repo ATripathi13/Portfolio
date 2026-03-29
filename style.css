@@ -950,10 +950,12 @@ canvas {
     width: 100vw;
     height: 100vh;
     background-color: #030303;
+    /* Solid background to prevent bleed-through */
     position: relative;
     overflow: hidden;
     display: flex;
     justify-content: center;
+    z-index: 1;
 }
 
 #experienceCanvas {
@@ -1037,5 +1039,187 @@ canvas {
 
     .exp-desc {
         font-size: 16px;
+    }
+}
+
+/* =========================================
+   PAGE 8: CONTACT
+   ========================================= */
+
+#page8 {
+    min-height: 100vh;
+    width: 100vw;
+    background: radial-gradient(circle at 70% 30%, #1a1a2e 0%, #0e0e0e 70%);
+    position: relative;
+    padding: 100px 5%;
+    display: flex;
+    align-items: center;
+    z-index: 10;
+    /* Ensure it sits above the pinned Page 7 */
+}
+
+.contact-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    gap: 80px;
+    align-items: center;
+}
+
+.contact-left {
+    flex: 1;
+}
+
+.hire-me-text {
+    font-size: 120px;
+    line-height: 0.9;
+    font-family: Objectivity;
+    font-weight: 800;
+    color: #fff;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
+
+.hire-me-text span {
+    color: transparent;
+    -webkit-text-stroke: 2px #fff;
+    opacity: 0.5;
+}
+
+.contact-sub {
+    font-size: 20px;
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1.5;
+    max-width: 400px;
+}
+
+.contact-right {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 40px;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.form-group {
+    margin-bottom: 24px;
+}
+
+#contact-form input,
+#contact-form textarea {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 12px 0;
+    color: #fff;
+    font-size: 16px;
+    font-family: gilroy;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+#contact-form input:focus,
+#contact-form textarea:focus {
+    border-bottom: 1px solid #fff;
+    box-shadow: 0 5px 15px rgba(255, 255, 255, 0.05);
+}
+
+#submit-btn {
+    width: 100%;
+    padding: 18px;
+    background: #fff;
+    color: #000;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: gilroy;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+}
+
+#submit-btn:hover {
+    background: #e0e0e0;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+#form-status {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 14px;
+    font-family: gilroy;
+}
+
+#form-status.success {
+    color: #4CAF50;
+}
+
+#form-status.error {
+    color: #f44336;
+}
+
+/* =========================================
+   FOOTER
+   ========================================= */
+
+.white-footer {
+    width: 100vw;
+    background: #fff;
+    padding: 60px 0;
+    color: #000;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.footer-links a {
+    color: #000;
+    font-size: 28px;
+    transition: all 0.3s ease;
+}
+
+.footer-links a:hover {
+    transform: translateY(-5px);
+    opacity: 0.6;
+}
+
+.footer-container p {
+    font-size: 14px;
+    opacity: 0.5;
+    font-family: gilroy;
+}
+
+@media (max-width: 968px) {
+    .contact-container {
+        flex-direction: column;
+        gap: 40px;
+    }
+
+    .hire-me-text {
+        font-size: 80px;
+    }
+
+    .contact-left,
+    .contact-right {
+        width: 100%;
     }
 }

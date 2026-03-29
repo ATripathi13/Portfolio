@@ -1223,6 +1223,7 @@ function initExperienceTimeline() {
       trigger: "#page7",
       scroller: "#main",
       pin: true,
+      pinSpacing: true, // Explicitly push subsequent content down
       scrub: 1,
       start: "top top",
       end: "+=300%", // 3 screens height of scrolling
@@ -1251,6 +1252,109 @@ function initExperienceTimeline() {
     .to({}, { duration: 0.5 });
 }
 
+
+
+/* =========================================
+   PAGE 8: CONTACT & EMAILJS
+   ========================================= */
+
+function initContactPage() {
+  // 1. Initialize EmailJS
+  // IMPORTANT: User needs to replace these with their own IDs from EmailJS dashboard
+  const PUBLIC_KEY = "YOUR_PUBLIC_KEY";
+  const SERVICE_ID = "YOUR_SERVICE_ID";
+  const TEMPLATE_ID = "YOUR_TEMPLATE_ID";
+
+  if (window.emailjs) {
+    emailjs.init(PUBLIC_KEY);
+  }
+
+  const contactForm = document.getElementById('contact-form');
+  const formStatus = document.getElementById('form-status');
+  const submitBtn = document.getElementById('submit-btn');
+
+  if (contactForm) {
+    contactForm.addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      // Change button state
+      const originalBtnText = submitBtn.innerHTML;
+      submitBtn.innerHTML = 'SENDING... <i class="ri-loader-4-line ri-spin"></i>';
+      submitBtn.disabled = true;
+
+      // Send form using EmailJS
+      emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, this)
+        .then(() => {
+          formStatus.textContent = "Message sent successfully! I'll get back to you soon.";
+          formStatus.className = "success";
+          contactForm.reset();
+        }, (error) => {
+          console.error('FAILED...', error);
+          formStatus.textContent = "Failed to send message. Please try again or email me directly.";
+          formStatus.className = "error";
+        })
+        .finally(() => {
+          submitBtn.innerHTML = originalBtnText;
+          submitBtn.disabled = false;
+
+          // Clear status after 5 seconds
+          setTimeout(() => {
+            formStatus.textContent = "";
+            formStatus.className = "";
+          }, 5000);
+        });
+    });
+  }
+
+  // 2. ScrollTrigger for Dark Nav on Page 8
+  ScrollTrigger.create({
+    trigger: "#page8",
+    start: "top 8%",
+    end: "bottom 0%",
+    scroller: "#main",
+    onEnter: () => document.getElementById("nav").classList.add("dark-nav"),
+    onLeaveBack: () => document.getElementById("nav").classList.remove("dark-nav"),
+  });
+
+  // 3. GSAP Animations for Contact Content
+  gsap.from(".hire-me-text", {
+    scrollTrigger: {
+      trigger: "#page8",
+      scroller: "#main",
+      start: "top 60%",
+    },
+    y: 100,
+    opacity: 0,
+    duration: 1,
+    ease: "power4.out"
+  });
+
+  gsap.from(".contact-right", {
+    scrollTrigger: {
+      trigger: "#page8",
+      scroller: "#main",
+      start: "top 60%",
+    },
+    x: 50,
+    opacity: 0,
+    duration: 1,
+    delay: 0.2,
+    ease: "power4.out"
+  });
+}
+
+// --- Combined Initialization Sequence ---
 window.addEventListener("load", () => {
-  setTimeout(initExperienceTimeline, 400); // Initialize slightly after others
+  // Sequence the initializations to ensure proper DOM measurement
+  setTimeout(() => {
+    initExperienceTimeline();
+    initContactPage();
+
+    // Force a full refresh after dynamic components are injected
+    ScrollTrigger.refresh();
+    if (window._locoScroll) {
+      window._locoScroll.update();
+    }
+    console.log("All sections initialized and ScrollTrigger refreshed.");
+  }, 500);
 });
